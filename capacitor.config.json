@@ -1,9 +1,9 @@
 {
   "appId": "com.hesabat.makhzan",
-  "appName": "حسابات المخزن",
+  "appName": "SH TRADING",
   "webDir": "www",
   "android": {
-    "backgroundColor": "#f1f5f9"
+    "backgroundColor": "#f2f6f4"
   },
   "server": {
     "androidScheme": "https"

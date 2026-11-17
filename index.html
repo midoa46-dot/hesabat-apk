@@ -3,18 +3,18 @@
 <style>
 /* Layout: شاشة واحدة بموبايل، تابات سفلية، كل شاشة قائمة وأزرار كبيرة. كل الأرقام مخفية (••••) وتظهر بالضغط. */
 :root{
-  --bg:#f1f5f9; --surface:#ffffff; --line:#dbe4ec; --ink:#1b2a38; --muted:#5f7184;
-  --accent:#2a76a8; --on-accent:#ffffff; --accent-soft:#e3eff8;
-  --danger:#b8453d; --danger-soft:#fbeceb; --good:#2a7f52;
+  --bg:#f2f6f4; --surface:#ffffff; --line:#dce7e2; --ink:#1d302b; --muted:#71817b;
+  --accent:#176b5b; --on-accent:#ffffff; --accent-soft:#e3f1ec;
+  --danger:#b94d4d; --danger-soft:#faeeee; --good:#23845f;
   --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#101a24; --surface:#17232f; --line:#26364a; --ink:#e6eef5; --muted:#93a6b8;
-  --accent:#6cb4e4; --on-accent:#08202f; --accent-soft:#17354a;
+  --bg:#111d1a; --surface:#192823; --line:#2b4038; --ink:#e7f0eb; --muted:#9aada4;
+  --accent:#63b69c; --on-accent:#10251f; --accent-soft:#1b3a31;
   --danger:#f09a92; --danger-soft:#3a2321; --good:#7cc79c; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#101a24; --surface:#17232f; --line:#26364a; --ink:#e6eef5; --muted:#93a6b8;
-  --accent:#6cb4e4; --on-accent:#08202f; --accent-soft:#17354a;
+  --bg:#111d1a; --surface:#192823; --line:#2b4038; --ink:#e7f0eb; --muted:#9aada4;
+  --accent:#63b69c; --on-accent:#10251f; --accent-soft:#1b3a31;
   --danger:#f09a92; --danger-soft:#3a2321; --good:#7cc79c; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -145,6 +145,22 @@ nav.tabs .ic{width:21px;height:21px}
 .bar i{display:block;height:100%;background:var(--good);border-radius:9px}
 .search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 12px;margin-bottom:12px;color:var(--muted)}
 .search input{flex:1;min-width:0;border:0;background:none;min-height:44px;outline:0}
+
+/* SH TRADING identity */
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 12px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 14px rgba(18,55,43,.045)}
+.brandmark{display:flex;align-items:center;gap:10px;min-width:0}
+.brandmark .brandicon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:#fff;font-size:17px;font-weight:800;letter-spacing:-1px}
+.brandmark strong{display:block;font-size:15px;letter-spacing:1.35px;direction:ltr;text-align:right}
+.brandmark small{display:block;color:var(--muted);font-size:10.5px;letter-spacing:.25px}
+.syslights{display:flex;flex-direction:column;gap:5px;flex:none}
+.syslight{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted);white-space:nowrap}
+.led{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 12%,transparent)}
+.led.warn{background:#d49a32;box-shadow:0 0 0 3px color-mix(in srgb,#d49a32 13%,transparent)}
+.led.bad{background:var(--danger);box-shadow:0 0 0 3px color-mix(in srgb,var(--danger) 13%,transparent)}
+@media(prefers-reduced-motion:no-preference){.led{animation:ledpulse 2.4s ease-in-out infinite}@keyframes ledpulse{0%,100%{opacity:1}50%{opacity:.42}}}
+.brand-footer{margin:20px 0 10px;padding:14px 12px 4px;text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px}
+.brand-footer a{display:inline-flex;align-items:center;gap:6px;margin-top:4px;color:var(--accent);font-weight:700;text-decoration:none;direction:ltr}
+.brand-footer a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 </style></head><body>
 <script>
 (function(){
@@ -351,7 +367,11 @@ function listHtml(entries,ctx,emptyTitle,emptyText){
 
 /* ---------- الشاشات ---------- */
 function top(title,extra){
-  return '<div class="top"><h1>'+title+'</h1><div class="tb">'+(extra||'')+
+  var backupFresh=!!S.settings.lastBackup&&(Date.now()-S.settings.lastBackup<=7*864e5);
+  var storageState=storageOk?'':'bad';
+  var backupState=backupFresh?'':'warn';
+  return '<header class="brandbar"><div class="brandmark"><span class="brandicon">SH</span><div><strong>SH TRADING</strong><small>INVENTORY &amp; ACCOUNTS</small></div></div><div class="syslights"><span class="syslight"><i class="led '+storageState+'"></i>'+(storageOk?'الحفظ المحلي':'مشكلة حفظ')+'</span><span class="syslight"><i class="led '+backupState+'"></i>'+(backupFresh?'نسخة حديثة':'راجع النسخة الاحتياطية')+'</span></div></header>'+
+    '<div class="top"><h1>'+title+'</h1><div class="tb">'+(extra||'')+
     '<button class="btn sm" data-act="eye" aria-pressed="'+ui.all+'">'+ic(ui.all?'eyeoff':'eye')+(ui.all?'إخفاء':'إظهار')+'</button>'+
     (ui.tab!=='more'?'<button class="btn sm" data-act="goto" data-tab="more">المزيد</button>':'')+'</div></div>';
 }
@@ -492,6 +512,7 @@ function render(){
     case 'log':h=vLog();break;
     default:h=vMore();
   }
+  h+='<footer class="brand-footer">تصميم <b>MOHAMED ALI</b><br><a href="https://wa.me/201114142610?text='+encodeURIComponent('مرحباً، عندي استفسار بخصوص تطبيق SH TRADING')+'" target="_blank" rel="noopener noreferrer" aria-label="التواصل عبر واتساب">واتساب · 01114142610</a></footer>';
   var tabs=[['stock','المخزن'],['sup','الموردين'],['cust','العملاء'],['shop','المحل'],['cash','الخزنة'],['log','السجل']];
   h+='<nav class="tabs" aria-label="التنقل"><div class="in">'+tabs.map(function(t){return '<button data-act="goto" data-tab="'+t[0]+'"'+(ui.tab===t[0]?' aria-current="page"':'')+'>'+ic(t[0])+'<span>'+t[1]+'</span></button>';}).join('')+'</div></nav>';
   var sy=window.scrollY;
