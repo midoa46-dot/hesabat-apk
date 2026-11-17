@@ -1,0 +1,11 @@
+{
+  "appId": "com.hesabat.makhzan",
+  "appName": "حسابات المخزن",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f1f5f9"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
